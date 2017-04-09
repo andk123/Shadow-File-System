@@ -16,7 +16,7 @@
 
 
 typedef struct _inode_t{
-	int size;
+	int size; //If it is a jnode it is the total number of inodes, if it is an inode it is size of file
 	int direct[14];
 	int indirect;
 
@@ -28,7 +28,8 @@ typedef struct _superblock_t{
 	unsigned char magic_num[4];
 	int bsize; //BLOCK_SIZE
 	int fs_size;// BLOCK_NUM
-	int num_inode; // INODE_NUM
+	int first_free_inode; //The first available spot for the inodes
+	int first_free_directory; //The first available spot in the root director
 	inode_t root;
 	inode_t shadow[4];
 	int lastShadow;
@@ -53,11 +54,23 @@ typedef struct _file_desc_t{
 
 superblock_t initialize_sb();
 
+void initialize_root_directory(directory_entry_t entry[]);
+
+void initialize_inode_file(inode_t inode[]);
+
+void initialize_file_descriptor();
+
 int checkBit(uint8_t bit);
 
 int find_file(char *name);
 
+int find_next_available_directory();
 
+int find_next_available_inode();
+
+int find_first_available_block();
+
+int find_last_available_block();
 
 
 
